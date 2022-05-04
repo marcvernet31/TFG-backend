@@ -1,0 +1,14 @@
+{
+    "databaseIdentifier": "generalitat",
+    "frontendIdentifier": "Generalitat de Catalunya",
+    "title": "Dades Obertes Catalunya",
+    "description": [
+        "És el web oficial de la Generalitat de Catalunya, el punt de referència per a la gent de Catalunya i d'arreu del món que vol informar-se sobre els organismes, les actuacions i els serveis de la Generalitat.",
+        "A més, permet localitzar ràpidament informació pràctica de viure i conèixer millor el país des de l'àmbit polític, social i cultural.",
+        "Si voleu fer-nos arribar els vostres suggeriments o queixes i ajudar-nos a millorar el web, us convidem a fer servir la bústia de contacte. Gràcies per la vostra col·laboració."
+    ],
+    "shortDescription": "Datasets de la Generalitat de Catalunya",
+    "api": "yes"
+}
+
+
