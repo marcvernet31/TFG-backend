@@ -43,7 +43,8 @@ similar to a specific dataset column
 """
 def categoricalSimilarity(datasetId, columnName):
     SIZE = 5 # number of columns to return
-    
+    db = TinyDB("../data/catalog.json")
+
     # open similarity matrix for categorical rows
     with open("../data/similarityMatrixCategoric.pkl", "rb") as fp:  
         similarityMatrix = pickle.load(fp)
@@ -77,7 +78,13 @@ def categoricalSimilarity(datasetId, columnName):
         datasetId = columnDescription['datasetIndex']
         columnName = columnDescription['columnName']
         value = round(element[1], 2)
-        result.append({'datasetId': datasetId, 'name': columnName, 'value': value})
+        result.append({
+            'datasetId': datasetId,
+            'datasetTitle': db.search(Query().index == int(datasetId))[0]['title'],
+            'datasetUrl': db.search(Query().index == int(datasetId))[0]['web_url'], 
+            'name': columnName, 
+            'value': value
+        })
         
     return(result)
 
@@ -169,6 +176,67 @@ def numericalSimilarity(datasetId, columnName):
         print([])
 
     return columnSimilarities(columnIndex, cleanOutputNum)
+
+
+# List of datasets recomended from column profile similarities
+def profileRecomendations(itemId, columns):
+    
+    SIZE = 4                  # number of datasets to return
+    similarities = dict()     # keep track of cummulative dictionaries for each dataset
+
+    for column in columns:
+        for similarColumn in column["similar"]:
+            # Only keep values larger that 0.9/100 
+            # to avoid considering columns with low similarity
+            if similarColumn['value'] > 0.9:
+                
+                columnObj = {
+                    "originalColumn": column["name"],
+                    "similarColumn": similarColumn['name'],
+                    "value": similarColumn['value']
+                }
+                
+                if similarColumn['datasetId'] in similarities: 
+                    similarities[similarColumn['datasetId']].append(columnObj)
+                else: 
+                    similarities[similarColumn['datasetId']] = [columnObj]
+
+    result = []                
+    for key in list(similarities.keys()):
+        
+        datasetSimilarity = 0
+        similarColumnslist = []
+        for columnValue in similarities[key]:  
+            datasetSimilarity += float(columnValue["value"])
+            similarColumnslist.append([{
+                "originalColumn": columnValue["originalColumn"], 
+                "similarColumn": columnValue["similarColumn"]
+            }])
+            
+        # Get information about dataset for the frontend
+        db = TinyDB("../data/catalog.json")
+        datasetObj = db.search(Query().index == int(key))[0]
+
+        result.append({
+            "datasetId": key,
+            "datasetInformation": {
+                "title": datasetObj["title"],
+                "description": datasetObj["description"],
+                "origin": datasetObj["origin"]
+            },
+            "datasetSimilarity": datasetSimilarity,
+            "countSimilarColumns": len(similarities[key]),
+            "similarColumns": similarColumnslist
+        })
+
+    # sort by number of similar columns
+    result.sort(key=lambda x: x["countSimilarColumns"], reverse=True)
+
+    # keep only good values
+    result = result[:SIZE]
+
+    return(result)
+
 
 
     
@@ -311,10 +379,34 @@ URL => ... /item/{itemId}
 Retrieve information from a single object (dataset)
 """
 def retrieveItem(itemId):
-    # hauria de llegir de DB
-    #catalog = pd.read_csv("../data/catalog.csv")
     db = TinyDB("../data/catalog.json")
     itemObj = db.search(Query().index == int(itemId))[0]
     itemObj['columns'] = getcolumnNames(itemId)
     itemObj['recomendations'] = recomendationsText(itemId)
+    itemObj['profileRecomendations'] = profileRecomendations(itemId, itemObj['columns'])
+
     return itemObj
+
+
+##########################
+# FRONTEND INFORMATION
+##########################
+
+def MainPage():
+    with open('frontend/MainPage.json') as json_file:
+        data = json.load(json_file)
+        return(data)
+
+def Catalog():
+    with open('frontend/Catalog.json') as json_file:
+        data = json.load(json_file)
+        return(data)
+
+def DataSource(source):
+    with open('frontend/DataSources.json') as json_file:
+        data = json.load(json_file)
+        try:
+            return data[source]
+        except:
+            return []
+        

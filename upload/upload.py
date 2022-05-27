@@ -16,8 +16,12 @@ def updateMainPage():
     uniqueCategories = list(set([x['category'] for x in db.all()]))
     newCategories = []
     for category in uniqueCategories:
-        newCategories.append({'name': category})
+        newCategories.append({
+            'name': category, 
+            'amount': len(db.search(Query().category == category))
+        })
     MainPage['category'] = newCategories
+
 
     # Update amount (count of datasets by origin)
     for origin in MainPage["origin"]:

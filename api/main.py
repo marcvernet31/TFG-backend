@@ -59,3 +59,20 @@ async def retrieveItemService(itemId):
 async def catalogService():
     response = catalog()
     return {"message": response}
+
+
+# Frontend elements
+@app.get("/frontend/MainPage")
+async def MainPageService():
+    response = MainPage()
+    return {"message": response}
+
+@app.get("/frontend/Catalog")
+async def MainPageService():
+    response = Catalog()
+    return {"message": response}
+
+@app.get("/frontend/DataSource/{source}")
+async def DataSourceService(source):
+    response = DataSource(source)
+    return {"message": response}

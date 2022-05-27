@@ -1,1 +1,5 @@
+<<<<<<< HEAD
+{"origins": ["Generalitat de Catalunya", "Barcelona", "generalitatCatalunya", "L'Hospitalet"], "categories": ["-", "Economia i empresa", "Societat i benestar", "Transport", "Cultura i oci", "Energia", "Sector Públic", "Treball", "Ciutat i serveis", "Economia", "Territori", "Demografia", "Sector públic", "Població", "salut", "Educació", "Administració", "Urbanisme i infraestructures", "Hisenda", "Salut", "Medi ambient"]}
+=======
 {"origins": ["generalitatCatalunya", "L'Hospitalet", "Generalitat de Catalunya", "Barcelona"], "categories": ["Transport", "Energia", "Treball", "Població", "Hisenda", "Economia", "Demografia", "Medi ambient", "Urbanisme i infraestructures", "Educació", "Economia i empresa", "Ciutat i serveis", "-", "Administració", "Sector públic", "Sector Públic", "Salut", "Cultura i oci", "salut", "Territori", "Societat i benestar"]}
+>>>>>>> b070ced423a89366acdb09dfeed2e4c5441df6f6
