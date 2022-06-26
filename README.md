@@ -45,9 +45,11 @@ Again, if there are issues with the sikit-learn library, it can also be executed
  > conda run -n <env-name>python3 atribute-similarity/ similarityCategoricalMatrix.py
  ```
 Finally, the API can be started. While all the last commands were just to set up all the required files, this command is the one that keeps the API working, and should be kept running for a s long as the website needs to be working. The ideal would be to have a server space dedicated to running the API.
+
 ```
 > cd api
 > uvicorn main:app --reload
+```
 There are also the update and upload utility scripts. The upload scripts introduce new data to the database in the form of a packet (specific description on ....) and the update script regenerates the front-end files with the current data on the database.
 ```
  > python3 upload/upload.py -packet <name> > python3 upload/update.py
