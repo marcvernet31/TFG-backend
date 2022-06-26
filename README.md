@@ -32,4 +32,23 @@ environment. In that case, the command used is instead:
 The next step is to execute the script to extract the column values for every dataset  
 in the catalog and calculate the profiles.  This operation is very slow, because it  
 needs to individually download every dataset in the catalog, check that the format  
-is correct and calculate the profiles for individual columns. The long execution time
+is correct and calculate the profiles for individual columns. The long execution time is not a big issue, because this process should be executed only once to create the profiles.
+```
+> python3 atribute -similarity/columnProfiles.py
+``` 
+Now that the column values are extracted, it’s time to calculate the profiles and similarities
+```
+> python3 atribute -similarity/similarityCategoricalMatrix.py
+```
+Again, if there are issues with the sikit-learn library, it can also be executed with:
+```
+ > conda run -n <env-name>python3 atribute-similarity/ similarityCategoricalMatrix.py
+ ```
+Finally, the API can be started. While all the last commands were just to set up all the required files, this command is the one that keeps the API working, and should be kept running for a s long as the website needs to be working. The ideal would be to have a server space dedicated to running the API.
+```
+> cd api
+> uvicorn main:app --reload
+There are also the update and upload utility scripts. The upload scripts introduce new data to the database in the form of a packet (specific description on ....) and the update script regenerates the front-end files with the current data on the database.
+```
+ > python3 upload/upload.py -packet <name> > python3 upload/update.py
+ ```
